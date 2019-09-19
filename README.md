@@ -1,2 +1,0 @@
-# uaito
-Uai Tournament
