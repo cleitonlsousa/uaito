@@ -1,6 +1,6 @@
 package com.uaito.service;
 
-import com.uaito.dao.AccountDAO;
+import com.uaito.repository.AccountRepository;
 import com.uaito.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,17 +9,17 @@ import org.springframework.stereotype.Service;
 public class AccountService {
 
     @Autowired
-    AccountDAO accountDAO;
+    AccountRepository accountRepository;
 
 
     public Account findById(Long id){
 
-        return accountDAO.findById(id).get();
+        return accountRepository.findById(id).get();
     }
 
     public void save(Account account){
 
-        accountDAO.save(account);
+        accountRepository.save(account);
 
     }
 
