@@ -1,37 +1,72 @@
 package com.uaito.dto;
 
-import com.uaito.domain.Account;
-import com.uaito.enuns.Faction;
-import lombok.Getter;
-import lombok.Setter;
+import com.uaito.enuns.FactionEnum;
 
-@Getter
-@Setter
+
 public class Player implements Comparable<Player>{
 
-    private Account account;
-    private String name;
-    private String groupName;
-    private String saveId;
-    private String email;
-    private String penaltyPoints;
-    private Integer staticTable;
+    private Long id;
+    private String firstName;
+    private String lastName;
     private boolean firstRoundBye = false;
     private boolean isActive = true;
-    private String squadId;
-    private Faction faction;
+    private FactionEnum factionEnum;
 
-    public Player(String name) {
-        this.name = name;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public boolean isFirstRoundBye() {
+        return firstRoundBye;
+    }
+
+    public void setFirstRoundBye(boolean firstRoundBye) {
+        this.firstRoundBye = firstRoundBye;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public FactionEnum getFactionEnum() {
+        return factionEnum;
+    }
+
+    public void setFactionEnum(FactionEnum factionEnum) {
+        this.factionEnum = factionEnum;
     }
 
     @Override
     public int compareTo(Player player) {
-        return this.getName().toUpperCase().compareTo(player.getName().toUpperCase());
+        return this.getFirstName().toUpperCase().compareTo(player.getFirstName().toUpperCase());
     }
 
     @Override
     public boolean equals(Object obj) {
-        return this.getAccount().getId() == ((Player)obj).getAccount().getId();
+        return this.getId() == ((Player)obj).getId();
     }
 }

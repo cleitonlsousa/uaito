@@ -1,47 +1,35 @@
-package com.uaito.domain;
+package com.uaito.response;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import com.uaito.dto.TournamentDetails;
+
 import java.time.LocalDateTime;
 
-@Entity
-public class Tournament implements Serializable {
+public class TournamentResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    private Long created;
+    private Long id;
+    private AccountResponse created;
     private String name;
     private String location;
     private Integer rounds;
-
-    @Column(name="date")
     private LocalDateTime dateTime;
-
-    @Column(name="points_size")
     private Integer pointsSize;
-
-    @Column(name="default_round_length")
     private Integer defaultRoundLength;
-
     private Integer tickets;
+    private TournamentDetails details;
 
-    private String details;
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getCreated() {
+    public AccountResponse getCreated() {
         return created;
     }
 
-    public void setCreated(Long created) {
+    public void setCreated(AccountResponse created) {
         this.created = created;
     }
 
@@ -101,11 +89,11 @@ public class Tournament implements Serializable {
         this.tickets = tickets;
     }
 
-    public String getDetails() {
+    public TournamentDetails getDetails() {
         return details;
     }
 
-    public void setDetails(String details) {
+    public void setDetails(TournamentDetails details) {
         this.details = details;
     }
 }

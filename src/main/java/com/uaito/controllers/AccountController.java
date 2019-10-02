@@ -2,15 +2,18 @@ package com.uaito.controllers;
 
 import com.uaito.domain.Account;
 import com.uaito.dto.Messages;
+import com.uaito.exception.AccountEmailExistException;
+import com.uaito.exception.NotFoundException;
+import com.uaito.request.AccountRequest;
 import com.uaito.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.NoSuchElementException;
-
 @RestController
+@Validated
 @RequestMapping("/account")
 public class AccountController {
 
@@ -18,35 +21,34 @@ public class AccountController {
     private AccountService accountService;
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> get(@PathVariable(value = "id") String id) {
+    @GetMapping("/{value}")
+    public ResponseEntity<?> get(@PathVariable(value = "value") String value) {
 
-        try{
+        try {
 
-            Account account = accountService.findById(Long.valueOf(id));
+            return ResponseEntity.status(HttpStatus.OK).body(accountService.findByIdOrEmail(value));
 
-            return new ResponseEntity(account, HttpStatus.OK);
+        } catch (NotFoundException e) {
 
-        } catch (NoSuchElementException e) {
-
-            return Messages.NOT_FOUND.returnMessageResponse();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Messages.NOT_FOUND);
 
         }
+
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Account account) {
+    public ResponseEntity<?> save(@RequestBody AccountRequest account) {
 
         try {
 
             accountService.save(account);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Messages.CREATED);
 
-            return Messages.ACCOUNT_CREATED.returnMessageResponse();
+        } catch (AccountEmailExistException e) {
 
-        }catch (Exception e){
-
-            return Messages.DEFAULT.returnMessageResponse(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Messages.ACCOUNT_EMAIL_EXIST);
 
         }
+
     }
 }

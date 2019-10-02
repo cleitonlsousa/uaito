@@ -1,27 +1,31 @@
 package com.uaito.dto;
 
-import com.uaito.enuns.MatchResult;
-import lombok.Getter;
-import lombok.Setter;
-
+import com.uaito.enuns.MatchResultEnum;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
 
-@Getter
-@Setter
 public class Match {
 
+    private Integer id;
     private Player player1;
     private Player player2;
-    private MatchResult matchResult;
+    private MatchResultEnum matchResultEnum;
     private Integer player1Points;
     private Integer player2Points;
     private boolean isDuplicate;
     private boolean isConcede;
 
-    public Match() {
-        this.matchResult = null;
+    public Match(Integer id, Player player1, Player player2) {
+        this.id = id;
+        this.player1 = player1;
+        this.player2 = player2;
+
+        initializer();
+    }
+
+    private void initializer() {
+        this.matchResultEnum = null;
         this.player1Points = null;
         this.player2Points = null;
     }
@@ -29,7 +33,7 @@ public class Match {
     public boolean isComplete(){
 
         return (
-                    (matchResult != null)
+                    (matchResultEnum != null)
                     && (player1Points != null)
                     &&(player2Points != null)
                 );
@@ -79,13 +83,77 @@ public class Match {
 
     public Player getWinner(){
 
-        return MatchResult.PLAYER_1_WINS.equals(getMatchResult()) ? getPlayer1() :
-                MatchResult.PLAYER_2_WINS.equals(getMatchResult()) ? getPlayer2() : null;
+        return MatchResultEnum.PLAYER_1_WINS.equals(getMatchResultEnum()) ? getPlayer1() :
+                MatchResultEnum.PLAYER_2_WINS.equals(getMatchResultEnum()) ? getPlayer2() : null;
 
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public boolean isBye() {
         return player2 == null;
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public void setPlayer1(Player player1) {
+        this.player1 = player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
+    }
+
+    public void setPlayer2(Player player2) {
+        this.player2 = player2;
+    }
+
+    public MatchResultEnum getMatchResultEnum() {
+        return matchResultEnum;
+    }
+
+    public void setMatchResultEnum(MatchResultEnum matchResultEnum) {
+        this.matchResultEnum = matchResultEnum;
+    }
+
+    public Integer getPlayer1Points() {
+        return player1Points;
+    }
+
+    public void setPlayer1Points(Integer player1Points) {
+        this.player1Points = player1Points;
+    }
+
+    public Integer getPlayer2Points() {
+        return player2Points;
+    }
+
+    public void setPlayer2Points(Integer player2Points) {
+        this.player2Points = player2Points;
+    }
+
+    public boolean isDuplicate() {
+        return isDuplicate;
+    }
+
+    public void setDuplicate(boolean duplicate) {
+        isDuplicate = duplicate;
+    }
+
+    public boolean isConcede() {
+        return isConcede;
+    }
+
+    public void setConcede(boolean concede) {
+        isConcede = concede;
     }
 
     public static boolean hasDuplicate(List<Match> matches) {
@@ -99,5 +167,7 @@ public class Match {
 
         return duplicateFound;
     }
+
+
 
 }

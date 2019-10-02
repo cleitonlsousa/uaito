@@ -23,10 +23,8 @@ public class MessageSerialize extends StdSerializer {
         Messages errors = (Messages) value;
 
         generator.writeStartObject();
-        generator.writeFieldName("error_code");
-        generator.writeString(errors.getErrorCode());
         generator.writeFieldName("message");
-        generator.writeString(errors.getErrorMessage());
+        generator.writeString(errors.getMessage());
         generator.writeEndObject();
     }
 }

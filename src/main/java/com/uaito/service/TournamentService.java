@@ -1,0 +1,99 @@
+package com.uaito.service;
+
+import com.uaito.domain.Tournament;
+import com.uaito.dto.Messages;
+import com.uaito.exception.*;
+import com.uaito.repository.TournamentRepository;
+import com.uaito.request.TournamentRequest;
+import com.uaito.response.TournamentResponse;
+import com.uaito.util.JsonUtil;
+import com.uaito.util.ParseObjectUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.uaito.exception.ExceptionSupplier.wrap;
+
+@Service
+public class TournamentService {
+
+    @Autowired
+    private TournamentRepository tournamentRepository;
+
+    @Autowired
+    private MatchService matchService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private JsonUtil jsonUtil;
+
+    @Autowired
+    private PlayerService playerService;
+
+    @Autowired
+    private RoundService roundService;
+
+    @Autowired
+    private ParseObjectUtil parseObjectUtil;
+
+    public Tournament findById(Long id) throws NotFoundException {
+
+        return tournamentRepository.findById(id).orElseThrow(() -> new NotFoundException(id.toString()));
+
+    }
+
+    public Tournament findByIdAndCreated(Long id, Long created) throws NotFoundException {
+
+        return tournamentRepository.findByIdAndCreated(id, created).orElseThrow(() -> new NotFoundException(id.toString()));
+
+    }
+
+    public List<TournamentResponse> findByCreated(Long created) throws NotFoundException {
+
+        List<Tournament> tournamentList = tournamentRepository.findByCreated(created);
+
+        if(CollectionUtils.isEmpty(tournamentList))
+            throw new NotFoundException(Messages.NOT_FOUND.getMessage());
+
+        return tournamentList.stream().map(t -> wrap(()-> parseObjectUtil.deParaResponse(t))).collect(Collectors.toList());
+
+    }
+
+    public List<TournamentResponse> findAll() throws NotFoundException {
+
+        List<Tournament> tournamentList = tournamentRepository.findAll();
+
+        if(CollectionUtils.isEmpty(tournamentList))
+            throw new NotFoundException(Messages.NOT_FOUND.getMessage());
+
+        return tournamentList.stream().map(t -> wrap(()-> parseObjectUtil.deParaResponse(t))).collect(Collectors.toList());
+
+    }
+
+    public void update(Tournament tournament) {
+
+        tournamentRepository.save(tournament);
+
+    }
+
+    public void insert(TournamentRequest request) throws TournamentNameExistException {
+
+        try {
+
+            tournamentRepository.save(parseObjectUtil.deParaTournament(request));
+
+        }catch (DataIntegrityViolationException d){
+
+            throw new TournamentNameExistException(Messages.TOURNAMENT_NAME_EXIST.getMessage());
+
+        }
+
+    }
+
+}
