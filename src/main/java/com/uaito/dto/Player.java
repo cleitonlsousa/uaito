@@ -67,6 +67,6 @@ public class Player implements Comparable<Player>{
 
     @Override
     public boolean equals(Object obj) {
-        return this.getId() == ((Player)obj).getId();
+        return this.getId().equals(((Player)obj).getId());
     }
 }

@@ -1,5 +1,7 @@
 package com.uaito.domain;
 
+import com.uaito.dto.TournamentDetails;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -29,12 +31,15 @@ public class Tournament implements Serializable {
 
     private String details;
 
-    public long getId() {
-        return id;
+    @Transient
+    private TournamentDetails tournamentDetails;
+
+    public Integer getByePoints(){
+        return getPointsSize() + (getPointsSize() / 2);
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public long getId() {
+        return id;
     }
 
     public Long getCreated() {
@@ -107,5 +112,13 @@ public class Tournament implements Serializable {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public TournamentDetails getTournamentDetails() {
+        return tournamentDetails;
+    }
+
+    public void setTournamentDetails(TournamentDetails tournamentDetails) {
+        this.tournamentDetails = tournamentDetails;
     }
 }

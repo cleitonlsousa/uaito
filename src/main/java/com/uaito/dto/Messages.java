@@ -9,7 +9,9 @@ public enum Messages {
     ACCOUNT_EMAIL_EXIST("UT004 - There is an account with that e-mail: "),
     PLAYER_EXIST("UT005 - Player already exist in this tournament"),
     MATCH_NOT_FINISH("UT006 - All match not finish yet"),
-    TOURNAMENT_TICKET_EXCEEDED("UT007 - Ticket limit exceeded")
+    TOURNAMENT_TICKET_EXCEEDED("UT007 - Ticket limit exceeded"),
+    ROUND_NOT_FINISH("Current round is not complete. Please complete all matches before continuing"),
+    MATCH_RESULT_INVALID("At least one tournament result is not correct. Check if points are backwards, too high, or a result should be a modified win or tie.")
     ;
 
    private String message;

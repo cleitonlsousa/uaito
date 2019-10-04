@@ -2,8 +2,10 @@ package com.uaito.controllers;
 
 import com.uaito.dto.Messages;
 import com.uaito.exception.*;
+import com.uaito.request.MatchResultRequest;
 import com.uaito.request.PlayerRequest;
 import com.uaito.request.TournamentRequest;
+import com.uaito.service.MatchService;
 import com.uaito.service.PlayerService;
 import com.uaito.service.RoundService;
 import com.uaito.service.TournamentService;
@@ -12,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -27,6 +31,9 @@ public class TournamentController {
 
     @Autowired
     private RoundService roundService;
+
+    @Autowired
+    private MatchService matchService;
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody TournamentRequest request) {
@@ -115,7 +122,26 @@ public class TournamentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Messages.NOT_FOUND);
         } catch (TournamentDetailsParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Messages.DEFAULT);
-        } catch (SwapPlayerException e) {
+        }
+
+    }
+
+    @PostMapping("/matchResult")
+    public ResponseEntity<?> matchResult(
+            @RequestHeader(value = "tournamentId") Long tournamentId,
+            @RequestBody List<MatchResultRequest> results){
+
+        try {
+
+            matchService.matchResult(tournamentId, results);
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Messages.NOT_FOUND);
+        } catch (TournamentDetailsParseException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Messages.DEFAULT);
+        } catch (MatchResultException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Messages.DEFAULT);
         }
 
@@ -129,12 +155,12 @@ public class TournamentController {
 
             return ResponseEntity.status(HttpStatus.OK).body(roundService.nextRound(tournamentId, created));
 
-        } catch (MatchNotFinishException e) {
-            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(Messages.MATCH_NOT_FINISH);
         } catch (TournamentDetailsParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Messages.DEFAULT);
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Messages.NOT_FOUND);
+        } catch (RoundNotFinishException e) {
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(Messages.ROUND_NOT_FINISH);
         }
     }
 

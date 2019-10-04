@@ -1,7 +1,7 @@
 package com.uaito.dto;
 
 import com.uaito.enuns.MatchResultEnum;
-import java.util.Comparator;
+
 import java.util.List;
 import java.util.TreeSet;
 
@@ -33,6 +33,8 @@ public class Match {
     public boolean isComplete(){
 
         return (
+                    (isBye() && player1Points != null)
+                ||
                     (matchResultEnum != null)
                     && (player1Points != null)
                     &&(player2Points != null)
@@ -49,16 +51,12 @@ public class Match {
 
         for (Round r : rounds) {
 
-            TreeSet<Match> uniqueMatchSet = new TreeSet<Match>(new Comparator<Match>() {
-
-                @Override
-                public int compare(Match o1, Match o2) {
-                    if(o1.getPlayer1() == o2.getPlayer1() && o1.getPlayer2() == o2.getPlayer2()){
-                        return 0;
-                    }
-
-                    return o1.getPlayer1().compareTo(o2.getPlayer1());
+            TreeSet<Match> uniqueMatchSet = new TreeSet<>((o1, o2) -> {
+                if (o1.getPlayer1() == o2.getPlayer1() && o1.getPlayer2() == o2.getPlayer2()) {
+                    return 0;
                 }
+
+                return o1.getPlayer1().compareTo(o2.getPlayer1());
             });
 
             uniqueMatchSet.addAll(r.getMatches());
@@ -144,10 +142,6 @@ public class Match {
         return isDuplicate;
     }
 
-    public void setDuplicate(boolean duplicate) {
-        isDuplicate = duplicate;
-    }
-
     public boolean isConcede() {
         return isConcede;
     }
@@ -168,6 +162,9 @@ public class Match {
         return duplicateFound;
     }
 
-
+    @Override
+    public String toString() {
+        return getPlayer1().getFirstName() + (isBye() ? " Has a bye" : " vs " + getPlayer2().getFirstName());
+    }
 
 }
