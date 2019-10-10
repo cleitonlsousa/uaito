@@ -68,7 +68,7 @@ public class MatchService {
 
         for (Player p : players) {
 
-            Integer points = playerService.playerScore(p, tournament);
+            Integer points = playerService.getScore(p, tournament);
 
             List<Player> pointGroup = playerMap.computeIfAbsent(points, k -> new ArrayList<>());
 

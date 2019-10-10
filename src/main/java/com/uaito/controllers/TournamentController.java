@@ -180,4 +180,18 @@ public class TournamentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Messages.NOT_FOUND);
         }
     }
+
+    @GetMapping("/ranking/{tournamentId}")
+    public ResponseEntity<?> ranking(@PathVariable(value = "tournamentId") Long tournamentId){
+
+        try {
+
+            return ResponseEntity.status(HttpStatus.OK).body(tournamentService.ranking(tournamentId));
+
+        } catch (TournamentDetailsParseException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Messages.DEFAULT);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Messages.NOT_FOUND);
+        }
+    }
 }

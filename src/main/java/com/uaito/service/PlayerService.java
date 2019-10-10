@@ -112,13 +112,13 @@ public class PlayerService {
 
     }
 
-    public int playerScore(Player p, Tournament t){
+    public int getScore(Player p, Tournament t){
 
         int score = 0;
 
         for (Match match : getPlayerMatches(p,t)) {
 
-            if (p.equals(match.getWinner())) {
+            if (match.isWinner(p)) {
 
                 score += Constants.WIN_POINTS;
 
@@ -163,10 +163,10 @@ public class PlayerService {
 
         if (tournament != null) {
 
-            int score = playerScore(player,tournament);
+            int score = getScore(player,tournament);
 
             List<Player> players = tournament.getTournamentDetails().getPlayers().stream()
-                    .filter(p -> score == playerScore(p,tournament)).collect(Collectors.toList());
+                    .filter(p -> score == getScore(p,tournament)).collect(Collectors.toList());
 
             if (players.isEmpty()) {
 
@@ -177,7 +177,7 @@ public class PlayerService {
                 playerLoop: for (Player p : players) {
                     for (Match m : getPlayerMatches(p,tournament)) {
 
-                        if (m.getWinner() != null && m.getWinner().equals(player)) {
+                        if (m.isWinner(player)) {
                             continue playerLoop;
                         }
                     }
@@ -227,7 +227,7 @@ public class PlayerService {
 
     private double getAverageScore(Player p, Tournament t) {
 
-        int score = playerScore(p,t);
+        int score = getScore(p,t);
         int matchCount = matchService.getCompletedPlayerMatches(p, t).size();
 
         return score * 1.0 / matchCount;
@@ -262,6 +262,22 @@ public class PlayerService {
         }
 
         return movPoints;
+    }
+
+    public int getWins(Tournament t, Player p) {
+
+        return (int)getPlayerMatches(p,t).stream().filter(match -> (match.isWinner(p) || match.isBye())).count();
+    }
+
+    public int getLosses(Tournament t, Player p) {
+
+        return (int)getPlayerMatches(p,t).stream().filter(match -> (!match.isWinner(p))).count();
+
+    }
+
+    public int getByes(Tournament t, Player p) {
+
+        return (int)getPlayerMatches(p,t).stream().filter(Match::isBye).count();
     }
 
 }

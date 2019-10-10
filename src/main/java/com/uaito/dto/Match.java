@@ -86,6 +86,16 @@ public class Match {
 
     }
 
+    public boolean isWinner(Player player){
+
+        return (
+                    (getMatchResultEnum() != null)
+                    &&(getWinner().equals(player))
+        );
+
+    }
+
+
     public Integer getId() {
         return id;
     }

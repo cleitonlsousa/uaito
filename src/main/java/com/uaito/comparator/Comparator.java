@@ -62,7 +62,7 @@ public class Comparator extends TournamentComparator<Player> {
 
 		switch (option) {
 		case SCORE:
-			result = compareInt(playerService.playerScore(o1,t) , playerService.playerScore(o2,t));
+			result = compareInt(playerService.getScore(o1,t) , playerService.getScore(o2,t));
 			break;
 		case HEAD_TO_HEAD:
 			if (o1.getFirstName().equals(o2.getFirstName())) {

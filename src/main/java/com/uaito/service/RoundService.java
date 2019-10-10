@@ -1,13 +1,11 @@
 package com.uaito.service;
 
-import com.uaito.Constants;
 import com.uaito.domain.Tournament;
 import com.uaito.dto.Match;
 import com.uaito.dto.Player;
 import com.uaito.dto.Round;
 import com.uaito.dto.TournamentDetails;
 import com.uaito.enuns.MatchResultEnum;
-import com.uaito.exception.MatchNotFinishException;
 import com.uaito.exception.NotFoundException;
 import com.uaito.exception.RoundNotFinishException;
 import com.uaito.exception.TournamentDetailsParseException;
@@ -20,7 +18,6 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -185,7 +182,7 @@ public class RoundService {
 
         List<Match> playerMatches = playerService.getPlayerMatches(byeUser, t);
 
-        long byes = playerMatches.stream().filter(Match::isBye).count();
+        int byes = playerService.getByes(t, byeUser);
 
         return (
                 (byes > minByes)

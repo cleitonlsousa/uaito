@@ -3,12 +3,14 @@ package com.uaito.service;
 import com.uaito.comparator.Comparator;
 import com.uaito.comparator.TournamentComparator;
 import com.uaito.domain.Tournament;
+import com.uaito.dto.Match;
 import com.uaito.dto.Messages;
 import com.uaito.dto.Player;
 import com.uaito.dto.TournamentDetails;
 import com.uaito.exception.*;
 import com.uaito.repository.TournamentRepository;
 import com.uaito.request.TournamentRequest;
+import com.uaito.response.RankingResponse;
 import com.uaito.response.TournamentResponse;
 import com.uaito.util.JsonUtil;
 import com.uaito.util.ParseObjectUtil;
@@ -17,6 +19,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -128,5 +131,42 @@ public class TournamentService {
 
     public TournamentComparator<Player> getPairingComparator(Tournament t) {
         return new Comparator(t, Comparator.pairingCompare, playerService);
+    }
+
+    public List<RankingResponse> ranking(Long tournamentId) throws NotFoundException, TournamentDetailsParseException {
+
+        Tournament tournament = findById(tournamentId);
+
+        if(CollectionUtils.isEmpty(tournament.getTournamentDetails().getRounds()))
+            throw new NotFoundException(Messages.NOT_FOUND.getMessage());
+
+        List<RankingResponse> response = new ArrayList<>();
+        RankingResponse ranking;
+
+        for (Player player : tournament.getTournamentDetails().getPlayers()) {
+
+            ranking = new RankingResponse();
+
+            ranking.setByes(playerService.getByes(tournament, player));
+            ranking.setMov(playerService.getMarginOfVictory(tournament,player));
+            ranking.setName(player.getFirstName());
+            ranking.setScore(playerService.getScore(player, tournament));
+            ranking.setSos(playerService.getAverageSoS(player, tournament));
+            ranking.setWins(playerService.getWins(tournament, player));
+            ranking.setLosses(playerService.getLosses(tournament, player));
+
+            response.add(ranking);
+
+        }
+
+
+       return response.stream()
+               .sorted(java.util.Comparator.comparing(RankingResponse::getWins).reversed()
+                .thenComparing(RankingResponse::getLosses))
+                .parallel()
+
+               .collect(Collectors.toList())
+               ;
+
     }
 }
