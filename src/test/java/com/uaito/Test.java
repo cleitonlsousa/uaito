@@ -7,7 +7,7 @@ import java.math.RoundingMode;
 public class Test {
 
 	@org.junit.Test
-	public void contextLoads() {
+	public void test() {
 
 		BigDecimal accruedValue = BigDecimal.valueOf(0.0158);
 

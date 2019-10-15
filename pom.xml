@@ -74,6 +74,13 @@
 			<version>1.11.638</version>
 		</dependency>
 
+		<dependency>
+			<groupId>br.com.six2six</groupId>
+			<artifactId>fixture-factory</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
