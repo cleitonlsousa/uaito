@@ -2,33 +2,29 @@ package com.uaito.comparator;
 
 import com.uaito.domain.Tournament;
 import com.uaito.dto.Player;
-import com.uaito.enuns.CompareOptions;
+import com.uaito.enuns.CompareOptionsEnum;
 import com.uaito.service.PlayerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class Comparator extends TournamentComparator<Player> {
 
 	private PlayerService playerService;
 
-	public static final CompareOptions[] uniqueCompare = {
-			CompareOptions.NAME };
-	public static final CompareOptions[] pairingCompare = {
-			CompareOptions.SCORE, CompareOptions.MARGIN_OF_VICTORY };
-	public static final CompareOptions[] rankingCompare = {
-			CompareOptions.SCORE,
-			CompareOptions.MARGIN_OF_VICTORY,
-			CompareOptions.AVERAGE_STRENGTH_OF_SCHEDULE, CompareOptions.RANDOM };
-	public static final CompareOptions[] rankingCompareNoHeadToHead = {
-			CompareOptions.SCORE, CompareOptions.MARGIN_OF_VICTORY,
-			CompareOptions.AVERAGE_STRENGTH_OF_SCHEDULE, CompareOptions.RANDOM };
+	public static final CompareOptionsEnum[] uniqueCompare = {
+			CompareOptionsEnum.NAME };
+	public static final CompareOptionsEnum[] pairingCompare = {
+			CompareOptionsEnum.SCORE, CompareOptionsEnum.MARGIN_OF_VICTORY };
+	public static final CompareOptionsEnum[] rankingCompare = {
+			CompareOptionsEnum.SCORE,
+			CompareOptionsEnum.MARGIN_OF_VICTORY,
+			CompareOptionsEnum.AVERAGE_STRENGTH_OF_SCHEDULE, CompareOptionsEnum.RANDOM };
+	public static final CompareOptionsEnum[] rankingCompareNoHeadToHead = {
+			CompareOptionsEnum.SCORE, CompareOptionsEnum.MARGIN_OF_VICTORY,
+			CompareOptionsEnum.AVERAGE_STRENGTH_OF_SCHEDULE, CompareOptionsEnum.RANDOM };
 
 	private final Tournament t;
-	private final CompareOptions[] sortOrder;
+	private final CompareOptionsEnum[] sortOrder;
 
 	private Comparator(){
 		this.t = null;
@@ -36,7 +32,7 @@ public class Comparator extends TournamentComparator<Player> {
 		this.playerService = null;
 	}
 
-	public Comparator(Tournament t, CompareOptions[] sortOrder, PlayerService playerService) {
+	public Comparator(Tournament t, CompareOptionsEnum[] sortOrder, PlayerService playerService) {
 		this.t = t;
 		this.sortOrder = sortOrder;
 		this.playerService = playerService;
@@ -47,7 +43,7 @@ public class Comparator extends TournamentComparator<Player> {
 
 		int result = 0;
 
-		for (CompareOptions option : sortOrder) {
+		for (CompareOptionsEnum option : sortOrder) {
 			if (result == 0) {
 				result = compareOption(o1, o2, option);
 			}
@@ -56,7 +52,7 @@ public class Comparator extends TournamentComparator<Player> {
 		return result;
 	}
 
-	private int compareOption(Player o1, Player o2, CompareOptions option) {
+	private int compareOption(Player o1, Player o2, CompareOptionsEnum option) {
 
 		int result = 0;
 

@@ -4,6 +4,7 @@ import com.uaito.domain.Account;
 import com.uaito.dto.Messages;
 import com.uaito.exception.AccountEmailExistException;
 import com.uaito.exception.NotFoundException;
+import com.uaito.repository.AccountRepository;
 import com.uaito.request.AccountRequest;
 import com.uaito.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,10 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-
     @GetMapping("/{value}")
     public ResponseEntity<?> get(@PathVariable(value = "value") String value) {
 
         try {
-
             return ResponseEntity.status(HttpStatus.OK).body(accountService.findByIdOrEmail(value));
 
         } catch (NotFoundException e) {

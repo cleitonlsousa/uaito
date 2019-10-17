@@ -1,0 +1,5 @@
+environment: dev
+var:
+  db_url: uaito_db_url
+  db_user: uaito_db_user
+  db_pass: uaito_db_pass

@@ -1,4 +1,4 @@
-package com.uaito;
+package com.uaito.test;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

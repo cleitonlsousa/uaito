@@ -1,4 +1,4 @@
-package com.uaito;
+package com.uaito.test;
 
 import br.com.six2six.fixturefactory.Fixture;
 import com.uaito.controllers.AccountController;
@@ -13,7 +13,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -60,4 +59,5 @@ public class AccountTest {
         Assert.assertTrue(email.getStatusCode().is4xxClientError());
 
     }
+
 }

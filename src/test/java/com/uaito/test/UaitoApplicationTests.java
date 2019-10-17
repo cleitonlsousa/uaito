@@ -1,4 +1,4 @@
-package com.uaito;
+package com.uaito.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,11 +1,16 @@
 package com.uaito.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 public class ServerConfig {
@@ -15,6 +20,8 @@ public class ServerConfig {
         return new RestTemplate();
     }
 
+    @Autowired
+    private DependencyFactory dependencyFactory;
 
     @Bean
     public DataSource dataSource() {
@@ -22,9 +29,9 @@ public class ServerConfig {
         DriverManagerDataSource ds = new DriverManagerDataSource();
 
         ds.setDriverClassName("org.postgresql.Driver");
-        ds.setUrl("jdbc:postgresql://uaidb.cmwkswbuwbmj.sa-east-1.rds.amazonaws.com:5432/dbtourneament");
-        ds.setUsername("serpent");
-        ds.setPassword("135rdBD2019");
+        ds.setUrl(dependencyFactory.getDbURL());
+        ds.setUsername(dependencyFactory.getDbUser());
+        ds.setPassword(dependencyFactory.getDbPass());
 
         return ds;
     }
